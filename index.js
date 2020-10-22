@@ -30,7 +30,7 @@ client.on('message', msg => {
   } else if (msg.content === 'checkout') {
 
     const employee = loadEmployees(msg.author.username)
-    sheets.checkin(employee.employee)
+    sheets.checkout(employee.employee)
       .then(message => {
         msg.reply(`employee: ${employee.employee} | discord user: ${employee.discord} | employee mail: ${employee.mail}. ${message}`)
       })
