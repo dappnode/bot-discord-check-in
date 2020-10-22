@@ -5,7 +5,7 @@ const doc = new GoogleSpreadsheet('1WaEGZe1BtXgx0Puz8PbPmmRjAJ76Hk6dZwNnxKMcvhs'
 
 async function accessSpreadsheet() {
     // spreadsheet key is the long id in the sheets URL  
-    return await doc.useServiceAccountAuth(require('./client_secret.json'));
+    return await doc.useServiceAccountAuth(require('./credentials/client_secret.json'));
 }
 
 async function readInfo() {
