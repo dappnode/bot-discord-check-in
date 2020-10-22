@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "index.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^12.4.0",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "google-spreadsheet": "^3.0.13",
+    "googleapis": "^39.2.0"
   }
 }
