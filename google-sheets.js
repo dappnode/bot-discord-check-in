@@ -35,7 +35,7 @@ async function checkin (employee) {
     await readInfo()
     const sheet = doc.sheetsByIndex[0]
     await addCheckIn(sheet, employee)
-    return await ('Successfull checked in')
+    return 'Successfull checked in'
 }
 
 async function checkout (employee) {
@@ -43,7 +43,7 @@ async function checkout (employee) {
     await readInfo()
     const sheet = doc.sheetsByIndex[0]
     await addCheckOut(sheet, employee)
-    return await ('Successfull checked out')
+    return 'Successfull checked out'
 }
 
 exports.checkin = checkin
