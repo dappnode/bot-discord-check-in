@@ -1,15 +1,22 @@
-function loadEmployee (employeeDiscord) {
-    try {
-      const employees = loadEmployees()
-      const employee = employees.find((employee) => employee.discord === employeeDiscord)
-      return employee
-    } catch (e) {
-      console.log(e)
-      return []
-    }
+import fs from "fs"
+
+export interface Employee {
+  name: string
+  discord: string
+  mail: string
 }
 
-function loadEmployees () {
+export function loadEmployee (employeeDiscord: string): Employee {
+      const employees = loadEmployees()
+      const employee = employees.find((employee) => employee.discord === employeeDiscord)
+      if (employee) {
+        return employee
+      } else {
+        throw Error('Employee does not exists ' + employeeDiscord)
+      }
+}
+
+export function loadEmployees (): Employee[] {
   try {
     const jsonString = fs.readFileSync('employees.json', 'utf8')
     if (!jsonString) {
@@ -17,34 +24,35 @@ function loadEmployees () {
     }
     return  JSON.parse(jsonString)
   } catch (e) {
-    if (e.code === 'ENONENT') {
+    if (e.code === 'ENOENT') {
       return []
+    } else {
+      throw e
     }
-    console.log(e)
   }
 }
 
-function removeEmployee (discord) {
+export function removeEmployee (discord: string) {
   const employees = loadEmployees()
-  const employeesToKeep = employees.filter((employee) => employee.discord !== discord)
+  const employeesToKeep = employees.filter((employee: Employee) => employee.discord !== discord)
   employees.length === employeesToKeep.length ? console.log('Employee not found!') : console.log('employee removed!')
   saveEmployees(employeesToKeep)
 }
 
-function saveEmployees (employees) {
+export function saveEmployees (employees: Employee[]) {
   const dataJSON = JSON.stringify(employees, null, 2) //prettier
   fs.writeFileSync('employees.json', dataJSON)
 }
 
-function addEmployee (employee, discord, mail) {
+export function addEmployee (employee: string, discord: string, mail: string) {
   const employees = loadEmployees()
-  const ducplicateEmployee = employees.find((employee) => employee.discord === discord)
+  const ducplicateEmployee = employees.find((employee: Employee) => employee.discord === discord)
 
   if (!ducplicateEmployee) {
     employees.push({
-        employee: employee,
+        name: employee,
         discord: discord,
-        mail, mail
+        mail: mail
     })
     saveEmployees(employees)
     console.log('New employee added!')
@@ -52,8 +60,3 @@ function addEmployee (employee, discord, mail) {
       console.log('Note employee taken')
   }
 }
-
-exports.loadEmployee = loadEmployee
-exports.loadEmployees = loadEmployees
-exports.removeEmployee = removeEmployee
-exports.addEmployee = addEmployee
