@@ -1,21 +1,19 @@
-const fs = require('fs')
-const sheets = require('./google-sheets')
-const {loadEmployee, loadEmployees, removeEmployee, addEmployee} = require('./utils')
-const Discord = require('discord.js')
-
-//test structury
+import fs from 'fs'
+import * as sheets from './google-sheets'
+import {loadEmployee, loadEmployees, removeEmployee, addEmployee, Employee} from './utils'
+import Discord from 'discord.js'
 
 const client = new Discord.Client()
+const discordToken = process.env.DISCORD_TOKEN ||  fs.readFileSync('./credentials/discord-token.txt', 'utf8').trim()
 
-const token = fs.readFileSync('./credentials/discord-token.txt', 'utf8').trim() //delete spaces
-// seen all elements inside string {}
-
-client.login(token)
+client.login(discordToken)
  
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`)
+  if (client.user){
+    console.log(`Logged in as ${client.user.tag}!`)
+  }
 })
-client.on('message', msg => {
+client.on('message', async msg => {
   try {
     const args = msg.content.split(' ')
     if (msg.content === 'ping') {

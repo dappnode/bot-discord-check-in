@@ -1,13 +1,14 @@
-const { GoogleSpreadsheet } = require('google-spreadsheet') 
+import fs from 'fs'
+import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet } from "google-spreadsheet"
 
-const doc = new GoogleSpreadsheet('1WaEGZe1BtXgx0Puz8PbPmmRjAJ76Hk6dZwNnxKMcvhs');
+const googleID = process.env.DOC_GOOGLE_SPREADSHEET || fs.readFileSync('./credentials/google-spreadsheet.txt', 'utf8').trim()
+const doc = new GoogleSpreadsheet(googleID);
 
 const getDate = function () {
     const today = new Date()
     const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const dateTime = date+' '+time;
-    console.log(dateTime)
     return dateTime
 }
 
@@ -19,18 +20,18 @@ async function accessSpreadsheet() {
 async function readInfo() {
     return await doc.loadInfo()
 }
-
-async function addCheckIn (sheet, employee) {
+// sheet what type of "data is??"
+async function addCheckIn (sheet: GoogleSpreadsheetWorksheet, employee: string) {
     const time = getDate()
-    return await sheet.addRow({ Employee: employee, Checkin: time, Checkout: null })
+    return await sheet.addRow({ Employee: employee, Checkin: time, Checkout: '' })
 } 
 
-async function addCheckOut (sheet, employee) {
+async function addCheckOut (sheet: GoogleSpreadsheetWorksheet, employee: string) {
     const time = getDate()
-    return await sheet.addRow({ Employee: employee, Checkin: null, Checkout: time })
+    return await sheet.addRow({ Employee: employee, Checkin: '', Checkout: time })
 } 
 
-async function checkin (employee) {
+export async function checkin (employee: string): Promise<string> {
     await accessSpreadsheet()
     await readInfo()
     const sheet = doc.sheetsByIndex[0]
@@ -38,13 +39,10 @@ async function checkin (employee) {
     return 'Successfull checked in'
 }
 
-async function checkout (employee) {
+export async function checkout (employee: string): Promise<string> {
     await accessSpreadsheet()
     await readInfo()
     const sheet = doc.sheetsByIndex[0]
     await addCheckOut(sheet, employee)
     return 'Successfull checked out'
 }
-
-exports.checkin = checkin
-exports.checkout = checkout
