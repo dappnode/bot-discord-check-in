@@ -1,11 +1,8 @@
-import fs from 'fs'
 import * as sheets from './google-sheets'
-import {loadEmployee, loadEmployees, removeEmployee, addEmployee, Employee} from './utils'
 import Discord from 'discord.js'
+import { discordToken } from './params'
 
 const client = new Discord.Client()
-const discordToken = process.env.DISCORD_TOKEN ||  fs.readFileSync('./credentials/discord-token.txt', 'utf8').trim()
-
 client.login(discordToken)
  
 client.on('ready', () => {
@@ -19,24 +16,27 @@ client.on('message', async msg => {
     if (msg.content === 'ping') {
       msg.reply('hey DappNodeTeam! you should go back to work...')
     } else if (msg.content === 'checkin') {
-      const employee = loadEmployee(msg.author.username)
-      const message = await sheets.checkin(employee.name)
+      const employee= await sheets.getEmployee(msg.author.username)
+      const message = await sheets.checkin(await employee.name)
       msg.reply(`employee: ${employee.name}. ${message}`)
     } else if (msg.content === 'checkout') {
-      const employee = loadEmployee(msg.author.username)
-      const message = await sheets.checkout(employee.name)
+      const employee = await sheets.getEmployee(msg.author.username)
+      const message = await sheets.checkout(await employee.name)
       msg.reply(`employee: ${employee.name}. ${message}`)
     } else if (msg.content === 'what is my avatar') {
       msg.reply(msg.author.displayAvatarURL())
     } else if (msg.content === 'who am I?'){
-      const employee = loadEmployee(msg.author.username)
-      msg.reply(`employee: ${employee.name} | discord user: ${employee.discord} | employee mail: ${employee.mail}`)
+      const employee = await sheets.getEmployee(msg.author.username)
+      msg.reply(`employee: ${employee.name} | discord user: ${employee.discord}| mail user: ${employee.mail}`)
+    } else if (args[0] === 'get' && args[1] === 'employee') {
+      const employee = await sheets.getEmployee(args[2])
+      msg.reply(`Name: ${employee.name}, Discord: ${employee.discord}, mail: ${employee.mail}`)
     } else if (args[0] === 'add' && args[1] === 'employee') {
-      addEmployee(args[2], args[3], args[4])
+      await sheets.addEmployee(args[2], args[3], args[4])
     } else if (args[0] === 'remove' && args[1] === 'employee') {
-      removeEmployee(args[2])
+      await sheets.removeEmployee(args[2])
     } else if (args[0] === 'get' && args[1] === 'employees') {
-      const employees = loadEmployees()
+      const employees = await sheets.getEmployees()
       const employeesNames = employees.map(employee => {
         return employee.name
       }).join(', ')
