@@ -30,4 +30,4 @@ if (!process.env.CLIENT_SECRET) {
     throw Error ('CLIENT_SECRET must exist in the environment')
 }
 export const credentialsJSON = process.env.CLIENT_SECRET
-export const credentials = JSON.parse(credentialsJSON)  
+export const clientSecretJson= JSON.parse(credentialsJSON)  
