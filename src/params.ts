@@ -19,15 +19,15 @@ if(!process.env.DOC_GOOGLE_SPREADSHEET) {
 export const googleID = process.env.DOC_GOOGLE_SPREADSHEET
 
 // Check for client_secret.json file in credentials folder
-const clientSecret = readFileSync('./credentials/client_secret.json', 'utf-8')
+/* const clientSecret = readFileSync('./credentials/client_secret.json', 'utf-8')
 if (!clientSecret) {
     throw Error ('client_secret.json file must exists')
 }
-export const clientSecretJson = JSON.parse(clientSecret)
+export const clientSecretJson = JSON.parse(clientSecret) */
 
-/* // Check for CLIENT_SECRET in the environment. JSON file 
+// Check for CLIENT_SECRET in the environment. JSON file 
 if (!process.env.CLIENT_SECRET) {
     throw Error ('CLIENT_SECRET must exist in the environment')
 }
 export const credentialsJSON = process.env.CLIENT_SECRET
-export const credentials = JSON.parse(credentialsJSON)  */
+export const credentials = JSON.parse(credentialsJSON)  
