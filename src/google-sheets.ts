@@ -7,9 +7,12 @@ export interface Employee {
     mail: string
   }
 
-const doc = new GoogleSpreadsheet(googleID);
+export const doc = new GoogleSpreadsheet(googleID);
+if (!doc) {
+    throw Error ('the doc must exists')
+}
 
-const getDate = function () {
+export const getDate = function () {
     const today = new Date()
     const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -17,11 +20,11 @@ const getDate = function () {
     return dateTime
 }
 
-async function accessSpreadsheet() {
+export async function accessSpreadsheet() {
     return await doc.useServiceAccountAuth(clientSecretJson);
 }
 
-async function readInfo() {
+export async function readInfo() {
     return await doc.loadInfo() // Loads sheets
 }
 
@@ -51,6 +54,13 @@ export async function checkout (employeeName: string): Promise<string> {
     const sheet = doc.sheetsByIndex[0]
     await addCheckOut(sheet, employeeName)
     return 'Successfull checked out'
+}
+
+export async function getChecks () {
+    await accessSpreadsheet()
+    await readInfo()
+    const sheet = doc.sheetsByIndex[0]
+    return await sheet.getRows()
 }
 
 // SECOND SHEET (EMPLOYEES)
@@ -102,4 +112,3 @@ async function getEmployeeRow (name?: string, discord?:string) {
         throw Error (`Employee ${name || discord} not found`)
     }
 }
-

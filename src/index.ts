@@ -49,3 +49,14 @@ client.on('message', async msg => {
     msg.reply(e.message)
   }  
 })
+
+export async function connectionDiscord () {
+  client.login(discordToken)
+
+  client.on('ready', () => {
+    if (client.user){
+      console.log(`Logged in as ${client.user.tag}!`)
+      return 
+    }
+  })
+}
