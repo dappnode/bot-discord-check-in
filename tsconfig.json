@@ -8,10 +8,10 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "strict": true,
-    "types": ["node"],
+    "types": ["node", "mocha"],
     "outDir": "dist",
     "sourceMap": true
   },
   "include": ["src/**/*", "test/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
